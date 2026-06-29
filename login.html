@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="center">
+<h1>Admin Login</h1>
+
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+</div>
+
+<script type="module">
+import { auth, signInWithEmailAndPassword } from "./firebase.js";
+
+window.login = async function () {
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+await signInWithEmailAndPassword(auth, email, password);
+
+window.location.href = "admin.html";
+};
+</script>
+
+</body>
+</html>
