@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🔥 Gym Leads Dashboard</h1>
+
+<button onclick="loadLeads()">Refresh Leads</button>
+
+<div id="leads"></div>
+
+<script type="module">
+import { db, collection, getDocs, updateDoc, doc } from "./firebase.js";
+
+window.loadLeads = async function () {
+const snap = await getDocs(collection(db, "leads"));
+
+let html = "";
+
+snap.forEach(d => {
+let data = d.data();
+
+html += `
+<div class="card">
+<h3>${data.name}</h3>
+<p>${data.phone}</p>
+<p>Status: ${data.status || "NEW"}</p>
+
+<button onclick="mark('${d.id}')">Mark Contacted</button>
+</div>
+`;
+});
+
+document.getElementById("leads").innerHTML = html;
+};
+
+window.mark = async function (id) {
+await updateDoc(doc(db, "leads", id), {
+status: "CONTACTED"
+});
+
+loadLeads();
+};
+
+loadLeads();
+</script>
+
+</body>
+</html>
